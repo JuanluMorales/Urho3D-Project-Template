@@ -60,6 +60,21 @@ void AudioManager::SubscribeConsoleCommands()
     SendEvent(ConsoleHandlerEvents::E_CONSOLE_COMMAND_ADD, data);
 }
 
+void AudioManager::RegisterAudio(AudioDefs::SOUND_EFFECTS effect, String file)
+{
+    soundEffects_[effect] = file;
+}
+
+void AudioManager::RegisterAudio(AudioDefs::MUSIC music, String file)
+{
+    music_[music] = file;
+}
+
+void AudioManager::RegisterAudio(AudioDefs::AMBIENT_SOUNDS ambient, String file)
+{
+    ambientSounds_[ambient] = file;
+}
+
 void AudioManager::HandlePlaySound(StringHash eventType, VariantMap& eventData)
 {
     using namespace PlaySound;

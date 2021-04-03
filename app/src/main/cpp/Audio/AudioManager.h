@@ -11,6 +11,14 @@
 
 using namespace Urho3D;
 
+
+namespace AudioDefs {
+    enum SOUND_EFFECTS : unsigned int;
+    enum MUSIC : unsigned int;
+    enum AMBIENT_SOUNDS : unsigned int;
+}
+
+
 class AudioManager : public Object
 {
     URHO3D_OBJECT(AudioManager, Object);
@@ -19,6 +27,21 @@ public:
     AudioManager(Context* context);
 
     virtual ~AudioManager();
+
+    /**
+     * Register Sound Effects assigned to AudioManager
+     */
+    void RegisterAudio(AudioDefs::SOUND_EFFECTS effect, String file);
+
+    /**
+     * Register Music assigned to AudioManager
+     */
+    void RegisterAudio(AudioDefs::MUSIC music, String file);
+
+    /**
+     * Register Ambient Sounds to AudioManager
+     */
+    void RegisterAudio(AudioDefs::AMBIENT_SOUNDS ambient, String file);
 
     /**
      * When enabled, multiple music tracks can be played simultaneously

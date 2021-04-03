@@ -1,7 +1,7 @@
 #pragma once
 
 namespace AudioDefs {
-    enum SOUND_EFFECTS {
+    enum SOUND_EFFECTS : unsigned int {
         HIT,
         THROW,
         BUTTON_CLICK,
@@ -9,12 +9,12 @@ namespace AudioDefs {
         PLACE_BLOCK
     };
 
-    enum MUSIC {
+    enum MUSIC : unsigned int {
         GAME,
         MENU
     };
 
-    enum AMBIENT_SOUNDS {
+    enum AMBIENT_SOUNDS : unsigned int {
         LEVEL
     };
 }
