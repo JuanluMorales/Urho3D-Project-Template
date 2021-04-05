@@ -13,6 +13,7 @@
 #include "Config/ConfigFile.h"
 #include "Input/ControllerInput.h"
 #include "Audio/AudioManager.h"
+#include "Audio/AudioManagerDefs.h"
 #include "Console/ConsoleHandler.h"
 #include "SceneManager.h"
 #include "CustomEvents.h"
@@ -207,6 +208,18 @@ void BaseApplication::Start()
     context_->GetSubsystem<AudioManager>()->AllowMultipleMusicTracks(true);
     // Allow multiple ambient tracks to play at the same time
     context_->GetSubsystem<AudioManager>()->AllowMultipleAmbientTracks(true);
+
+    using namespace AudioDefs;
+    context_->GetSubsystem<AudioManager>()->RegisterAudio(SOUND_EFFECTS::HIT, "Sounds/PlayerFistHit.wav");
+    context_->GetSubsystem<AudioManager>()->RegisterAudio(SOUND_EFFECTS::THROW, "Sounds/NutThrow.wav");
+    context_->GetSubsystem<AudioManager>()->RegisterAudio(SOUND_EFFECTS::BUTTON_CLICK, "Sounds/click.wav");
+    context_->GetSubsystem<AudioManager>()->RegisterAudio(SOUND_EFFECTS::ACHIEVEMENT, "Sounds/achievement.wav");
+    context_->GetSubsystem<AudioManager>()->RegisterAudio(SOUND_EFFECTS::PLACE_BLOCK, "Sounds/place_block.wav");
+
+    context_->GetSubsystem<AudioManager>()->RegisterAudio(MUSIC::GAME, "Sounds/music.wav");
+    context_->GetSubsystem<AudioManager>()->RegisterAudio(MUSIC::MENU, "Sounds/menu.wav");
+
+    context_->GetSubsystem<AudioManager>()->RegisterAudio(AMBIENT_SOUNDS::LEVEL, "Sounds/ambient.wav");
 
     auto controllerInput = new ControllerInput(context_);
     context_->RegisterSubsystem(controllerInput);

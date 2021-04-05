@@ -20,18 +20,6 @@ AudioManager::~AudioManager()
 
 void AudioManager::Init()
 {
-    using namespace AudioDefs;
-    soundEffects_[SOUND_EFFECTS::HIT] = "Sounds/PlayerFistHit.wav";
-    soundEffects_[SOUND_EFFECTS::THROW] = "Sounds/NutThrow.wav";
-    soundEffects_[SOUND_EFFECTS::BUTTON_CLICK] = "Sounds/click.wav";
-    soundEffects_[SOUND_EFFECTS::ACHIEVEMENT] = "Sounds/achievement.wav";
-    soundEffects_[SOUND_EFFECTS::PLACE_BLOCK] = "Sounds/place_block.wav";
-
-    music_[MUSIC::GAME] = "Sounds/music.wav";
-    music_[MUSIC::MENU] = "Sounds/menu.wav";
-
-    ambientSounds_[AMBIENT_SOUNDS::LEVEL] = "Sounds/ambient.wav";
-
     SubscribeToEvents();
 }
 
