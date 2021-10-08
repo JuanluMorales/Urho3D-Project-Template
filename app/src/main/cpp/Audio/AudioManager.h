@@ -60,19 +60,19 @@ public:
     /**
      * Add sound effect to specific node
      */
-    SoundSource3D* AddEffectToNode(Node* node, unsigned int index);
+    SoundSource3D* AddEffectToNode(Node* node, unsigned int index, bool loop = false);
 
     /**
      * Add music to specific node
      */
-    SoundSource3D* AddMusicToNode(Node* node, unsigned int index);
+    SoundSource3D* AddMusicToNode(Node* node, unsigned int index, bool loop = true);
 
 protected:
     virtual void Init();
 
 private:
 
-    SoundSource3D* CreateNodeSound(Node* node, const String& filename, const String& type);
+    SoundSource3D* CreateNodeSound(Node* node, const String& filename, const String& type, bool loop = false);
 
     /**
      * Register to all sound related events
