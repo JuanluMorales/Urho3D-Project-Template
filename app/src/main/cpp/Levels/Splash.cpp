@@ -22,8 +22,8 @@ Splash::Splash(Context* context) :
 {
     // List of different logos that multiple splash screens will show
     logos_.Reserve(1);
-    logos_.Push("Textures/UrhoIcon.png");
-//    logos_.Push("Textures/Achievements/retro-controller.png");
+    logos_.Push({"Textures/UrhoIcon.png", true, false});
+    // logos_.Push({"Textures/Urho3DSplashDark_800.png", false, true});
 }
 
 Splash::~Splash()
@@ -65,7 +65,7 @@ void Splash::CreateUI()
     logoIndex_ = data_["LogoIndex"].GetInt();
 
     // Get the Urho3D fish texture
-    auto* decalTex = cache->GetResource<Texture2D>(logos_[logoIndex_]);
+    auto* decalTex = cache->GetResource<Texture2D>(logos_[logoIndex_].resource);
     // Create a new sprite, set it to use the texture
     SharedPtr<Sprite> sprite(new Sprite(context_));
     sprite->SetTexture(decalTex);
@@ -76,18 +76,23 @@ void Splash::CreateUI()
     auto width = (float)graphics->GetWidth() / GetSubsystem<UI>()->GetScale();
     auto height = (float)graphics->GetHeight() / GetSubsystem<UI>()->GetScale();
 
-    // The UI root element is as big as the rendering window, set random position within it
-    sprite->SetPosition(width / 2, height / 2);
-
-    // Avoid having too large logos
-    // We assume here that the logo image is a regular rectangle
-    if (decalTex->GetWidth() <= 256 && decalTex->GetHeight() <= 256) {
-        // Set sprite size & hotspot in its center
-        sprite->SetSize(IntVector2(decalTex->GetWidth(), decalTex->GetHeight()));
-        sprite->SetHotSpot(IntVector2(decalTex->GetWidth() / 2, decalTex->GetHeight() / 2));
+    if (logos_[logoIndex_].full) {
+        sprite->SetPosition(0, 0);
+        sprite->SetSize(width, height);
     } else {
-        sprite->SetSize(IntVector2(256, 256));
-        sprite->SetHotSpot(IntVector2(128, 128));
+        // The UI root element is as big as the rendering window, set random position within it
+        sprite->SetPosition(width / 2, height / 2);
+
+        // Avoid having too large logos
+        // We assume here that the logo image is a regular rectangle
+        if (decalTex->GetWidth() <= 256 && decalTex->GetHeight() <= 256) {
+            // Set sprite size & hotspot in its center
+            sprite->SetSize(IntVector2(decalTex->GetWidth(), decalTex->GetHeight()));
+            sprite->SetHotSpot(IntVector2(decalTex->GetWidth() / 2, decalTex->GetHeight() / 2));
+        } else {
+            sprite->SetSize(IntVector2(256, 256));
+            sprite->SetHotSpot(IntVector2(128, 128));
+        }
     }
 
     sprite->SetPriority(0);
@@ -95,30 +100,33 @@ void Splash::CreateUI()
     // Add as a child of the root UI element
     ui->GetRoot()->AddChild(sprite);
 
-    SharedPtr<ObjectAnimation> animation(new ObjectAnimation(context_));
-    SharedPtr<ValueAnimation> scale(new ValueAnimation(context_));
-    // Use spline interpolation method
-    scale->SetInterpolationMethod(IM_SPLINE);
-    // Set spline tension
-    scale->SetKeyFrame(0.0f, Vector2(1, 1));
-    scale->SetKeyFrame(SPLASH_TIME / 1000 / 2, Vector2(1.5, 1.5));
-    scale->SetKeyFrame(SPLASH_TIME / 1000, Vector2(1, 1));
-    scale->SetKeyFrame(SPLASH_TIME / 1000 * 2, Vector2(1, 1));
-    animation->AddAttributeAnimation("Scale", scale);
+    if (logos_[logoIndex_].rotate) {
 
-    SharedPtr<ValueAnimation> rotation(new ValueAnimation(context_));
-    // Use spline interpolation method
-    rotation->SetInterpolationMethod(IM_SPLINE);
-    rotation->SetSplineTension(0.0f);
-    // Set spline tension
-    rotation->SetKeyFrame(0.0f, 0.0f);
-    rotation->SetKeyFrame(1.0, 0.0f);
-    rotation->SetKeyFrame(2.0, 360 * 1.0f);
-    rotation->SetKeyFrame(SPLASH_TIME / 1000, 360 * 1.0f);
-    rotation->SetKeyFrame(SPLASH_TIME / 1000 * 2, 360 * 1.0f);
-    animation->AddAttributeAnimation("Rotation", rotation);
+        SharedPtr<ObjectAnimation> animation(new ObjectAnimation(context_));
+        SharedPtr<ValueAnimation> scale(new ValueAnimation(context_));
+        // Use spline interpolation method
+        scale->SetInterpolationMethod(IM_SPLINE);
+        // Set spline tension
+        scale->SetKeyFrame(0.0f, Vector2(1, 1));
+        scale->SetKeyFrame(SPLASH_TIME / 1000 / 2, Vector2(1.5, 1.5));
+        scale->SetKeyFrame(SPLASH_TIME / 1000, Vector2(1, 1));
+        scale->SetKeyFrame(SPLASH_TIME / 1000 * 2, Vector2(1, 1));
+        animation->AddAttributeAnimation("Scale", scale);
 
-    sprite->SetObjectAnimation(animation);
+        SharedPtr<ValueAnimation> rotation(new ValueAnimation(context_));
+        // Use spline interpolation method
+        rotation->SetInterpolationMethod(IM_SPLINE);
+        rotation->SetSplineTension(0.0f);
+        // Set spline tension
+        rotation->SetKeyFrame(0.0f, 0.0f);
+        rotation->SetKeyFrame(1.0, 0.0f);
+        rotation->SetKeyFrame(2.0, 360 * 1.0f);
+        rotation->SetKeyFrame(SPLASH_TIME / 1000, 360 * 1.0f);
+        rotation->SetKeyFrame(SPLASH_TIME / 1000 * 2, 360 * 1.0f);
+        animation->AddAttributeAnimation("Rotation", rotation);
+
+        sprite->SetObjectAnimation(animation);
+    }
 }
 
 void Splash::SubscribeToEvents()

@@ -15,6 +15,12 @@ namespace Levels {
         void HandleUpdate(StringHash eventType, VariantMap& eventData);
 
     protected:
+        typedef struct {
+            String resource;
+            bool rotate;
+            bool full;
+        } SplashItem;
+
         void Init () override;
 
     private:
@@ -45,6 +51,6 @@ namespace Levels {
         /**
          * List of all the logos that splash screen should show
          */
-        Vector<String> logos_;
+        Vector<SplashItem> logos_;
     };
 }
