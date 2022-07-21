@@ -14,7 +14,6 @@
 using namespace Levels;
 using namespace LevelManagerEvents;
 
-static int SPLASH_TIME = 3000;
 
 Splash::Splash(Context* context) :
     BaseLevel(context),
@@ -22,7 +21,7 @@ Splash::Splash(Context* context) :
 {
     // List of different logos that multiple splash screens will show
     logos_.Reserve(1);
-    logos_.Push({"Textures/UrhoIcon.png", true, false});
+    logos_.Push({"Textures/UrhoIcon.png", 3500, true, false});
     // logos_.Push({"Textures/Urho3DSplashDark_800.png", false, true});
 }
 
@@ -108,9 +107,9 @@ void Splash::CreateUI()
         scale->SetInterpolationMethod(IM_SPLINE);
         // Set spline tension
         scale->SetKeyFrame(0.0f, Vector2(1, 1));
-        scale->SetKeyFrame(SPLASH_TIME / 1000 / 2, Vector2(1.5, 1.5));
-        scale->SetKeyFrame(SPLASH_TIME / 1000, Vector2(1, 1));
-        scale->SetKeyFrame(SPLASH_TIME / 1000 * 2, Vector2(1, 1));
+        scale->SetKeyFrame(logos_[logoIndex_].time / 1000 / 2, Vector2(1.5, 1.5));
+        scale->SetKeyFrame(logos_[logoIndex_].time / 1000, Vector2(1, 1));
+        scale->SetKeyFrame(logos_[logoIndex_].time / 1000 * 2, Vector2(1, 1));
         animation->AddAttributeAnimation("Scale", scale);
 
         SharedPtr<ValueAnimation> rotation(new ValueAnimation(context_));
@@ -121,8 +120,8 @@ void Splash::CreateUI()
         rotation->SetKeyFrame(0.0f, 0.0f);
         rotation->SetKeyFrame(1.0, 0.0f);
         rotation->SetKeyFrame(2.0, 360 * 1.0f);
-        rotation->SetKeyFrame(SPLASH_TIME / 1000, 360 * 1.0f);
-        rotation->SetKeyFrame(SPLASH_TIME / 1000 * 2, 360 * 1.0f);
+        rotation->SetKeyFrame(logos_[logoIndex_].time / 1000, 360 * 1.0f);
+        rotation->SetKeyFrame(logos_[logoIndex_].time / 1000 * 2, 360 * 1.0f);
         animation->AddAttributeAnimation("Rotation", rotation);
 
         sprite->SetObjectAnimation(animation);
@@ -140,7 +139,7 @@ void Splash::HandleUpdate(StringHash eventType, VariantMap& eventData)
     if (input->IsMouseVisible()) {
         input->SetMouseVisible(false);
     }
-    if (timer_.GetMSec(false) > SPLASH_TIME) {
+    if (timer_.GetMSec(false) > logos_[logoIndex_].time) {
         HandleEndSplash();
     }
 }

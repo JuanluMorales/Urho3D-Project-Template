@@ -17,6 +17,7 @@ namespace Levels {
     protected:
         typedef struct {
             String resource;
+            int time;
             bool rotate;
             bool full;
         } SplashItem;
